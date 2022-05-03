@@ -1,6 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-// const WebpackShellPlugin = require('webpack-shell-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
 const { NODE_ENV = 'production' } = process.env;
@@ -16,17 +16,14 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts'],
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@types': path.resolve(__dirname, 'src/types'),
-      '@utils': path.resolve(__dirname, 'src/utils'),
-      '@config': path.resolve(__dirname, 'src/config'),
-      '@models': path.resolve(__dirname, 'src/models'),
-      '@controllers': path.resolve(__dirname, 'src/controllers'),
-      '@middlewares': path.resolve(__dirname, 'src/middlewares'),
-      '@services': path.resolve(__dirname, 'src/services'),
-      '@routes': path.resolve(__dirname, 'src/routes'),
-    },
+    plugins: [
+      new TsconfigPathsPlugin({
+        configFile: './tsconfig.json',
+        logLevel: 'info',
+        extensions: ['.ts', '.tsx'],
+        mainFields: ['browser', 'main'],
+      }),
+    ],
   },
 
   module: {

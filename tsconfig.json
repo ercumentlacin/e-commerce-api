@@ -1,5 +1,24 @@
 {
   "compilerOptions": {
-    "sourceMap": true
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": "src",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "paths": {
+      "@": ["./src"],
+      "@interfaces/*": ["interfaces/*"],
+      "@utils/*": ["utils/*"],
+      "@config/*": ["config/*"],
+      "@models/*": ["models/*"],
+      "@controllers/*": ["controllers/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@services/*": ["services/*"],
+      "@routes/*": ["routes/*"],
+      "@errors/*": ["errors/*"],
+      "@validators/*": ["validators/*"]
+    }
   }
 }
