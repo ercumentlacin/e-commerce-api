@@ -1,6 +1,8 @@
 import {
+  Authorized,
   BadRequestError,
   Body,
+  CurrentUser,
   Delete,
   ForbiddenError,
   Get,
@@ -14,6 +16,7 @@ import {
   Res,
   UseAfter,
   UseBefore,
+  HttpError,
 } from 'routing-controllers';
 import UserService from '@services/UserService';
 import UserType from '@interfaces/UserType';
@@ -80,20 +83,23 @@ export default class UserController {
 
   @Put('/:id')
   public async updateUser(
+    @CurrentUser() currentUser: UserType,
     @Param('id') id: string,
     @Body() user: UserType
   ): Promise<UserType> {
     if (!isMongoId(id)) throw new BadRequestError('Invalid id');
 
-    try {
-      const updatedUser = await UserService.updateUser(id, user);
-      return updatedUser;
-    } catch (error) {
-      if (error instanceof InternalServerError) {
-        throw new InternalServerError(error.message);
-      }
-      throw new BadRequestError(error.message);
+    if (!currentUser) throw new HttpError(401, 'Unauthorized');
+
+    if (currentUser.id !== id) {
+      throw new ForbiddenError('You can only update your own account');
     }
+
+    const { error } = UserValidator.updateUser.validate(user);
+    if (error) throw new BadRequestError(error.details[0].message);
+
+    const updatedUser = await UserService.updateUser(id, user);
+    return updatedUser;
   }
 
   @Delete('/:id')

@@ -74,6 +74,7 @@ export class AdminMiddlewares implements ExpressMiddlewareInterface {
 
 export class IsAuthenticatedMiddlewares implements ExpressMiddlewareInterface {
   public use(req: any, res: Response, next: (err?: any) => any): any {
+    console.log('req', req);
     if (!req.user) {
       return next(new RoutingController.HttpError(401, 'Unauthorized'));
     }

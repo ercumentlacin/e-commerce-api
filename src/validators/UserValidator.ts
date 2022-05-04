@@ -20,7 +20,6 @@ const updateUser: ObjectSchema<Partial<UserType>> = Joi.object().keys({
   email: Joi.string().email(),
   password: Joi.string(),
   image: Joi.string(),
-  role: Joi.string(),
 });
 
 const deleteUser: ObjectSchema<Pick<UserType, '_id'>> = Joi.object().keys({

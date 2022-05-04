@@ -27,21 +27,9 @@ export default class UserService {
     id: string,
     user: UserType
   ): Promise<UserType> {
-    try {
-      const { error } = await UserValidator.updateUser.validate(user);
-      if (error) {
-        throw new BadRequestError(error.details[0].message);
-      }
-      const updatedUser = await UserModel.findByIdAndUpdate(id, user, {
-        new: true,
-      });
-      return updatedUser;
-    } catch (error) {
-      if (error instanceof DbError) {
-        throw new InternalServerError(error.message);
-      }
-      throw new HttpError(error.message, error.statusCode);
-    }
+    return await UserModel.findByIdAndUpdate(id, user, {
+      new: true,
+    });
   }
 
   public static async deleteUser(id: string): Promise<UserType> {
